@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: page-replacement
+
+server:
+  port: 3000
