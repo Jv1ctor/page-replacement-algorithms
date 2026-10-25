@@ -1,0 +1,5 @@
+algoritmo;faults
+FIFO;15
+LRU;12
+NFU;13
+Optimal;9

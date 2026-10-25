@@ -9,6 +9,7 @@ public abstract class AlgorithmsBase {
     protected final int lengthFrames;
     protected final int[] frames;
     protected int faults = 0;
+    protected int[] faultsHistory = new int[0];
     protected int[] chain = new int[0]; // only optimal algorithm
 
 
@@ -24,6 +25,7 @@ public abstract class AlgorithmsBase {
 
     public final void execute(int[] chain) {
         this.chain = chain; // only optimal algorithm
+        this.faultsHistory = new int[chain.length];
         for (int i = 0; i < chain.length; i++) {
             this.loggerOut("[frames state] "+Arrays.toString(frames));
             int page = chain[i];
@@ -32,10 +34,12 @@ public abstract class AlgorithmsBase {
 
             if (pos != -1) {
                 this.loggerOut("[ok] hit!");
+                this.faultsHistory[i] = this.faults;
                 this.onUse(page, pos);
             } else {
                 this.loggerOut("[error] miss!");
                 this.faults++;
+                this.faultsHistory[i] = this.faults;
                 pos = freeFrame();
                 if (pos != -1) {
                     this.loggerOut("[log] adding "+chain[i]);
@@ -75,7 +79,7 @@ public abstract class AlgorithmsBase {
     }
 
     public int getFaults() { return faults; }
-
+    public int[] getFaultsHistory() { return this.faultsHistory; }
 
     // for log config
     public void onLogger(){

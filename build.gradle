@@ -16,6 +16,10 @@ repositories {
 	mavenCentral()
 }
 
+dependencies {
+	implementation 'org.knowm.xchart:xchart:3.8.8'
+}
+
 application {
 	mainClass = 'com.example.page_replacement.algorithms.ExecutionTest'
 }
