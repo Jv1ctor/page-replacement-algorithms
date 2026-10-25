@@ -3,37 +3,47 @@ package com.example.page_replacement.algorithms;
 import java.util.Arrays;
 
 public abstract class AlgorithmsBase {
+    // for config logs
+    private boolean logger = false;
+
     protected final int lengthFrames;
     protected final int[] frames;
     protected int faults = 0;
+    protected int[] chain = new int[0]; // only optimal algorithm
+
 
     public AlgorithmsBase(int lengthFrames){
         this.lengthFrames = lengthFrames;
         this.frames = new int[lengthFrames];
         Arrays.fill(this.frames, -1);
     }
+    public AlgorithmsBase(int lengthFrames, int[] frames){
+        this(lengthFrames); // quadros nao informados ficam livres (-1)
+        System.arraycopy(frames, 0, this.frames, 0, Math.min(frames.length, lengthFrames));
+    }
 
     public final void execute(int[] chain) {
+        this.chain = chain; // only optimal algorithm
         for (int i = 0; i < chain.length; i++) {
-            System.out.println("[frames state] "+Arrays.toString(frames));
+            this.loggerOut("[frames state] "+Arrays.toString(frames));
             int page = chain[i];
-            System.out.println("[log] reading "+chain[i]);
+            this.loggerOut("[log] reading "+chain[i]);
             int pos = this.findPage(page);
 
             if (pos != -1) {
-                System.out.println("[ok] hit!");
+                this.loggerOut("[ok] hit!");
                 this.onUse(page, pos);
             } else {
-                System.out.println("[error] miss!");
+                this.loggerOut("[error] miss!");
                 this.faults++;
                 pos = freeFrame();
                 if (pos != -1) {
-                    System.out.println("[log] adding "+chain[i]);
+                    this.loggerOut("[log] adding "+chain[i]);
                     this.frames[pos] = page;
                     this.onLoad(page, pos);
                 } else {
-                    System.out.println("[error] no space!");
-                    int vPos = this.selectVictiam(i);
+                    this.loggerOut("[error] no space!");
+                    int vPos = this.selectVictim(i);
                     int oldPage = this.frames[vPos];
                     this.frames[vPos] = page;
                     this.onSwap(vPos, oldPage, page);
@@ -43,10 +53,10 @@ public abstract class AlgorithmsBase {
         }
     }
 
-    protected abstract int selectVictiam(int i);
+    protected abstract int selectVictim(int p);
     protected void onUse(int page, int pos) {}
     protected void onLoad(int page, int pos) {}
-    protected void onSwap(int victiamPos, int oldPage, int newPage) {}
+    protected void onSwap(int victimPos, int oldPage, int newPage) {}
 
 
     protected int findPage(int page) {
@@ -65,4 +75,16 @@ public abstract class AlgorithmsBase {
     }
 
     public int getFaults() { return faults; }
+
+
+    // for log config
+    public void onLogger(){
+        this.logger = true;
+    }
+
+    protected void loggerOut(String text){
+        if(this.logger){
+            System.out.println(text);
+        }
+    }
 }

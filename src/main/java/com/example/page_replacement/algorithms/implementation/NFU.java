@@ -13,9 +13,18 @@ public class NFU extends AlgorithmsBase {
         this.counts = new int[lengthFrames];
         this.loadedAt = new int[lengthFrames];
     }
+    public NFU(int lengthFrames, int[] frames){
+        super(lengthFrames, frames);
+        this.counts = new int[lengthFrames];
+        this.loadedAt = new int[lengthFrames];
+        // paginas iniciais sao as mais antigas, na ordem do array
+        for (int k = 0; k < lengthFrames; k++) {
+            if (this.frames[k] != -1) loadedAt[k] = clock++;
+        }
+    }
 
     @Override
-    protected int selectVictiam(int i) {
+    protected int selectVictim(int i) {
         int victim = 0;
         for (int k = 1; k < lengthFrames; k++) {
             if (counts[k] < counts[victim] || (counts[k] == counts[victim] && loadedAt[k] < loadedAt[victim])) {
