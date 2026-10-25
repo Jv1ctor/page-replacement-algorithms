@@ -1,6 +1,7 @@
 package com.example.page_replacement.algorithms;
 
 import com.example.page_replacement.algorithms.implementation.FIFO;
+import com.example.page_replacement.algorithms.implementation.LRU;
 import com.example.page_replacement.algorithms.implementation.NFU;
 import com.example.page_replacement.algorithms.implementation.Optimal;
 
@@ -16,12 +17,14 @@ public class ExecutionTest {
         check("Teste 1 FIFO", new FIFO(3), chain, 9);
         check("Teste 1 Optimal", new Optimal(3), chain, 7);
         check("Teste 1 NFU", new NFU(3), chain, 10);
+        check("Teste 1 LRU", new LRU(3), chain, 10);
 
 
         // ===== Teste 2: sequencia de Belady, 4 quadros (anomalia: FIFO piora) =====
         check("Teste 2 FIFO", new FIFO(4), chain, 10);
         check("Teste 2 Optimal", new Optimal(4), chain, 6);
         check("Teste 2 NFU", new NFU(4), chain, 8);
+        check("Teste 2 LRU", new LRU(4), chain, 8);
 
 
         // ===== Teste 3: sequencia classica, 3 quadros =====
@@ -30,6 +33,7 @@ public class ExecutionTest {
         check("Teste 3 FIFO", new FIFO(3), chain3, 15);
         check("Teste 3 Optimal", new Optimal(3), chain3, 9);
         check("Teste 3 NFU", new NFU(3), chain3, 13);
+        check("Teste 3 LRU", new LRU(3), chain3, 12);
 
 
         // ===== Teste 4: pagina popular (NFU deve proteger a pagina 1) =====
@@ -38,6 +42,7 @@ public class ExecutionTest {
         check("Teste 4 FIFO", new FIFO(3), chain4, 7);
         check("Teste 4 Optimal", new Optimal(3), chain4, 6);
         check("Teste 4 NFU", new NFU(3), chain4, 6);
+        check("Teste 4 LRU", new LRU(3), chain4, 7);
 
 
         // ===== Teste 5: laco maior que a memoria (pior caso do FIFO) =====
@@ -46,6 +51,7 @@ public class ExecutionTest {
         check("Teste 5 FIFO", new FIFO(3), chain5, 12);
         check("Teste 5 Optimal", new Optimal(3), chain5, 6);
         check("Teste 5 NFU", new NFU(3), chain5, 12);
+        check("Teste 5 LRU", new LRU(3), chain5, 12);
 
 
         // ===== Teste 6: tudo cabe na memoria (so faltas compulsorias) =====
@@ -54,6 +60,7 @@ public class ExecutionTest {
         check("Teste 6 FIFO", new FIFO(3), chain6, 3);
         check("Teste 6 Optimal", new Optimal(3), chain6, 3);
         check("Teste 6 NFU", new NFU(3), chain6, 3);
+        check("Teste 6 LRU", new LRU(3), chain6, 3);
 
 
         // ===== Teste 7: apenas 1 quadro (caso de borda) =====
@@ -62,6 +69,7 @@ public class ExecutionTest {
         check("Teste 7 FIFO", new FIFO(1), chain7, 5);
         check("Teste 7 Optimal", new Optimal(1), chain7, 5);
         check("Teste 7 NFU", new NFU(1), chain7, 5);
+        check("Teste 7 LRU", new LRU(1), chain7, 5);
 
 
         // ========== Testes com memoria pre-carregada (frames iniciais) ==========
@@ -72,6 +80,7 @@ public class ExecutionTest {
         check("Teste 8 FIFO", new FIFO(3, initial8), chain6, 0);
         check("Teste 8 Optimal", new Optimal(3, initial8), chain6, 0);
         check("Teste 8 NFU", new NFU(3, initial8), chain6, 0);
+        check("Teste 8 LRU", new LRU(3, initial8), chain6, 0);
 
 
         // ===== Teste 9: sequencia de Belady com {1, 2, 3} ja na memoria =====
@@ -81,6 +90,7 @@ public class ExecutionTest {
         check("Teste 9 FIFO", new FIFO(3, initial9), chain, 6);
         check("Teste 9 Optimal", new Optimal(3, initial9), chain, 4);
         check("Teste 9 NFU", new NFU(3, initial9), chain, 7);
+        check("Teste 9 LRU", new LRU(3, initial9), chain, 7);
 
 
         // ===== Teste 10: memoria parcialmente cheia ({7, 0} em 3 quadros) =====
@@ -91,6 +101,7 @@ public class ExecutionTest {
         check("Teste 10 FIFO", new FIFO(3, initial10), chain3, 13);
         check("Teste 10 Optimal", new Optimal(3, initial10), chain3, 7);
         check("Teste 10 NFU", new NFU(3, initial10), chain3, 11);
+        check("Teste 10 LRU", new LRU(3, initial10), chain3, 10);
 
 
         // ===== Teste 11: memoria cheia de paginas que nunca sao usadas =====
@@ -100,6 +111,7 @@ public class ExecutionTest {
         check("Teste 11 FIFO", new FIFO(3, initial11), chain6, 3);
         check("Teste 11 Optimal", new Optimal(3, initial11), chain6, 3);
         check("Teste 11 NFU", new NFU(3, initial11), chain6, 3);
+        check("Teste 11 LRU", new LRU(3, initial11), chain6, 3);
 
 
         // ===== Teste 12: quadros nao informados devem comecar livres =====
@@ -110,6 +122,7 @@ public class ExecutionTest {
         check("Teste 12 FIFO", new FIFO(3, initial12), chain12, 2);
         check("Teste 12 Optimal", new Optimal(3, initial12), chain12, 2);
         check("Teste 12 NFU", new NFU(3, initial12), chain12, 2);
+        check("Teste 12 LRU", new LRU(3, initial12), chain12, 2);
 
 
         System.out.println();
