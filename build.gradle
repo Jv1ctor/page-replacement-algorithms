@@ -23,3 +23,20 @@ dependencies {
 application {
 	mainClass = 'com.example.page_replacement.algorithms.ExecutionTest'
 }
+
+// Gráficos: ./gradlew plotByAlgorithm | ./gradlew plotByReference
+tasks.register('plotByAlgorithm', JavaExec) {
+	group = 'application'
+	description = 'Gráfico de barras com o total de faltas por algoritmo'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'com.example.page_replacement.app.AccFaultsByAlgorithmCsv'
+	workingDir = projectDir
+}
+
+tasks.register('plotByReference', JavaExec) {
+	group = 'application'
+	description = 'Gráfico de linhas com as faltas acumuladas por referência'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'com.example.page_replacement.app.AccFaultsByReference'
+	workingDir = projectDir
+}
