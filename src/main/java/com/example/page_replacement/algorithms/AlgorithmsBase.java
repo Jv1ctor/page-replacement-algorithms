@@ -15,18 +15,24 @@ public abstract class AlgorithmsBase {
 
     public final void execute(int[] chain) {
         for (int i = 0; i < chain.length; i++) {
+            System.out.println("[frames state] "+Arrays.toString(frames));
             int page = chain[i];
+            System.out.println("[log] reading "+chain[i]);
             int pos = this.findPage(page);
 
             if (pos != -1) {
+                System.out.println("[ok] hit!");
                 this.onUse(page, pos);
             } else {
+                System.out.println("[error] miss!");
                 this.faults++;
                 pos = freeFrame();
                 if (pos != -1) {
+                    System.out.println("[log] adding "+chain[i]);
                     this.frames[pos] = page;
                     this.onLoad(page, pos);
                 } else {
+                    System.out.println("[error] no space!");
                     int vPos = this.selectVictiam(i);
                     int oldPage = this.frames[vPos];
                     this.frames[vPos] = page;
