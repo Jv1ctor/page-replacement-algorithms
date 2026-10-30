@@ -8,9 +8,9 @@ CURSO: CIÊNCIA DA COMPUTAÇÃO
 
 # SIMULADOR DE ALGORITMOS DE SUBSTITUIÇÃO DE PÁGINAS EM JAVA
 
-Autor 1: João Victor Rodrigues Barreto
+Autor 1: João Victor Rodrigues Barreto (Matrícula: 2422976)
 
-Autor 2: Nicolas Marcelino da Mota
+Autor 2: Nicolas Marcelino da Mota (Matrícula: 2420508)
 
 Palavras-chaves: Java. Page. Faults. Algorithms.
 
