@@ -14,6 +14,10 @@ Autor 2: Nicolas Marcelino da Mota
 
 Palavras-chaves: Java. Page. Faults. Algorithms.
 
+Link para o README: https://github.com/Jv1ctor/page-replacement-algorithms/blob/main/README.md
+
+Link para o repositório do projeto: https://github.com/Jv1ctor/page-replacement-algorithms/
+
 # RESUMO
 
 O projeto executa uma
@@ -52,6 +56,103 @@ Foram implementados quatro algoritmos, que diferem apenas no critério de escolh
 Todos os algoritmos estendem a classe `AlgorithmsBase`, que contém o laço de execução comum: procura a página na memória, contabiliza a falta quando ela não é encontrada, utiliza um quadro livre se houver ou escolhe uma vítima. Cada algoritmo implementa apenas os métodos `selectVictim`, `onUse`, `onLoad` e `onSwap`.
 
 O projeto é organizado em dois pacotes principais. O pacote `algorithms` contém a classe base, as quatro implementações (FIFO, LRU, NFU e Optimal) e a classe `ExecutionTest`, que reúne os testes. O pacote `app` contém as aplicações de geração de resultados: `AccFaultsByAlgorithmCsv`, que produz um gráfico de barras com o total de faltas por algoritmo; `AccFaultsByReference`, que produz um gráfico de linhas com as faltas acumuladas a cada referência; e `CsvExport`, que exporta os dados em CSV com separador ";". Os arquivos gerados são gravados no diretório `src/data`.
+
+## Como executar
+
+### Testes
+
+A classe principal configurada no `build.gradle` é a `ExecutionTest`, que roda 48
+verificações (12 cenários × 4 algoritmos), incluindo a anomalia de Belady, casos de
+borda com 1 quadro e memória pré-carregada:
+
+```bash
+./gradlew run
+```
+
+Saída esperada (final):
+
+```
+[PASS] Teste 12 LRU: 2 faults
+
+[result] 48 passed, 0 failed
+```
+
+Se algum teste falhar, o processo termina com código `1`.
+
+No Windows, use `gradlew.bat run`.
+
+### Gráficos e CSVs
+
+As classes em `app/` abrem um gráfico em uma janela e gravam um CSV em `src/data/`.
+Ambas usam a sequência clássica `7 0 1 2 0 3 0 4 2 3 0 3 2 1 2 0 1 7 0 1` com 3 quadros.
+
+| Classe                    | Gráfico                                    | CSV gerado                          |
+|---------------------------|--------------------------------------------|-------------------------------------|
+| `AccFaultsByAlgorithmCsv` | Barras com o total de faltas por algoritmo | `src/data/acc-faults-by-algorithms` |
+| `AccFaultsByReference`    | Linhas com as faltas acumuladas por passo  | `src/data/acc-faults-by-references` |
+
+**Pelo terminal:** cada gráfico tem sua própria tarefa no Gradle:
+
+```bash
+# Barras: total de faltas por algoritmo
+./gradlew plotByAlgorithm
+
+# Linhas: faltas acumuladas a cada referência
+./gradlew plotByReference
+```
+
+No Windows, use `gradlew.bat plotByAlgorithm` e `gradlew.bat plotByReference`.
+
+O comando abre a janela do gráfico, grava o CSV e mostra `Arquivo CSV gerado com
+sucesso!`. Ele só termina quando a janela é fechada. Para ver todas as tarefas
+disponíveis, rode `./gradlew tasks --group application`.
+
+**Pela IDE:** abra o projeto como projeto Gradle (IntelliJ, VS Code, Eclipse) e
+execute o `main` da classe desejada. Rode a partir da raiz do projeto, pois o CSV é
+gravado no caminho relativo `src/data`.
+
+Para mudar a sequência de referências ou o número de quadros, edite as variáveis
+`chain` e `lengthFrame` no início do `main` de cada classe.
+
+## Formato dos CSVs
+
+Os arquivos usam `;` como separador e não têm extensão.
+
+`acc-faults-by-algorithms`:
+
+```
+algoritmo;faults
+FIFO;15
+LRU;12
+...
+```
+
+`acc-faults-by-references`: uma linha por passo, com a página referenciada e as faltas
+acumuladas de cada algoritmo.
+
+```
+passo;referencia;FIFO;Optimal;LRU;NFU
+1;7;1;1;1;1
+...
+```
+
+## Usando os algoritmos no código
+
+```java
+int[] chain = {1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5};
+
+AlgorithmsBase fifo = new FIFO(3);           // 3 quadros vazios
+fifo.onLogger();                             // opcional: imprime cada passo
+fifo.execute(chain);
+
+fifo.getFaults();                            // total de faltas (9)
+fifo.getFaultsHistory();                     // faltas acumuladas após cada referência
+
+AlgorithmsBase lru = new LRU(3, new int[]{1, 2}); // memória pré-carregada; o quadro restante fica livre
+```
+
+Cada instância guarda estado, então crie um objeto novo para cada execução.
+
 
 # RESULTADOS E DISCUSSÕES
 
